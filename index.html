@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="senka // kvts">
+  <meta property="og:description" content="network pentester">
+  <meta property="og:image" content="https://i.pinimg.com/736x/7c/84/1b/7c841b3bc050d2a88b60fc9f7ac60783.jpg">
+  <meta property="og:url" content="https://senkakitsune.github.io">
+  <meta property="og:type" content="website">
+  <title>senka ;3</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+    :root {
+      --pastel-pink: #ffb6c1;
+      --pastel-blue: #a6e3e9;
+      --pastel-purple: #c8a2c8;
+      --pastel-mint: #c9f7c9;
+      --dark-bg: #0f0f17;
+      --darker-bg: #080810;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: linear-gradient(135deg, var(--dark-bg), var(--darker-bg));
+      color: #ffffff;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header-gradient {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, 
+        rgba(198, 162, 200, 0.1), 
+        rgba(166, 227, 233, 0.1),
+        rgba(255, 182, 193, 0.1));
+      z-index: -1;
+    }
+    
+    .header-content {
+      z-index: 1;
+    }
+    
+
+    .top-icons {
+      position: absolute;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      z-index: 10;
+    }
+    
+    .icon-link {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    
+    .icon-link:hover {
+      transform: translateY(-5px);
+      filter: drop-shadow(0 0 8px var(--pastel-blue));
+    }
+    
+    .icon-link svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .icon-link.kofi svg path {
+      fill: url(#kofi-gradient);
+    }
+    
+    .icon-link.github svg path {
+      fill: url(#github-gradient);
+    }
+    
+    .icon-link.discord svg path {
+      fill: url(#discord-gradient);
+    }
+    
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+    
+    h1 span {
+      background: linear-gradient(90deg, var(--pastel-pink), var(--pastel-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: var(--pastel-purple);
+      opacity: 0.8;
+      margin-top: 0.5rem; 
+    }
+
+    .aka-text {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: -0.5rem; 
+      margin-bottom: 0.5rem; 
+    }
+ 
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      opacity: 0.7;
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) translateX(-50%); }
+      50% { transform: translateY(10px) translateX(-50%); }
+    }
+    
+
+    .discord-status {
+      padding: 5rem 0;
+      background: linear-gradient(to bottom, 
+        rgba(15, 15, 23, 0), 
+        rgba(8, 8, 16, 0.5));
+    }
+    
+    .discord-card {
+      max-width: 400px;
+      margin: 0 auto;
+      background: rgba(15, 15, 23, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    
+    .discord-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .discord-header {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    
+    .discord-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--pastel-blue);
+      position: relative;
+    }
+    
+    .discord-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .discord-status-indicator {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #5865F2; 
+      border: 3px solid rgba(15, 15, 23, 0.7);
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+    
+    .discord-status-online {
+      background-color: #43b581;
+    }
+    
+    .discord-status-idle {
+      background-color: #faa61a;
+    }
+    
+    .discord-status-dnd {
+      background-color: #f04747;
+    }
+    
+    .discord-status-offline {
+      background-color: #747f8d;
+    }
+    
+    .discord-user-info {
+      margin-left: 1.5rem;
+    }
+    
+    .discord-username {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--pastel-mint);
+      margin-bottom: 0.3rem;
+    }
+    
+    .discord-discriminator {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-bottom: 0.5rem;
+    }
+    
+    .discord-status-text {
+      font-size: 0.9rem;
+      color: #fff;
+      opacity: 0.8;
+    }
+    
+    .discord-activity {
+      width: 100%;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .discord-activity-title {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-bottom: 0.5rem;
+    }
+    
+    .discord-activity-content {
+      font-size: 0.9rem;
+      color: var(--pastel-purple);
+    }
+    
+    .projects {
+      padding: 5rem 0;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 3rem;
+      text-align: center;
+      color: var(--pastel-blue);
+    }
+    
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .project-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .project-card {
+      background: rgba(15, 15, 23, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s;
+      cursor: pointer;
+    }
+    
+    .project-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 
+                  0 0 0 1px var(--pastel-pink),
+                  0 0 30px rgba(255, 182, 193, 0.2);
+    }
+    
+    .project-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--pastel-mint);
+    }
+    
+    .project-card p {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      opacity: 0.8;
+    }
+    
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      background: rgba(200, 162, 200, 0.2);
+      color: var(--pastel-purple);
+    }
+    
+    .skills {
+      padding: 5rem 0;
+      background: linear-gradient(to bottom, 
+        rgba(15, 15, 23, 0), 
+        rgba(8, 8, 16, 0.8));
+    }
+    
+    .skills-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .skill-category {
+      padding: 1.5rem;
+      border-radius: 8px;
+      background: rgba(15, 15, 23, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    
+    .skill-category.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .skill-category h3 {
+      color: var(--pastel-blue);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .skill-list {
+      list-style: none;
+    }
+    
+    .skill-list li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .skill-list li::before {
+      content: '>';
+      margin-right: 0.5rem;
+      color: var(--pastel-pink);
+    }
+    
+    footer {
+      padding: 3rem 0;
+      text-align: center;
+      background: var(--darker-bg);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+  
+    
+    .copyright {
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
+    
+    .terminal-cursor {
+      display: inline-block;
+      width: 0.3rem;
+      height: 2.0rem;
+      background-color: var(--pastel-pink);
+      animation: blink 1s step-end infinite;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
+    .loading {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 20px;
+    }
+    
+    .loading div {
+      position: absolute;
+      top: 8px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--pastel-pink);
+      animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+    
+    .loading div:nth-child(1) {
+      left: 8px;
+      animation: loading1 0.6s infinite;
+    }
+    
+    .loading div:nth-child(2) {
+      left: 8px;
+      animation: loading2 0.6s infinite;
+    }
+    
+    .loading div:nth-child(3) {
+      left: 32px;
+      animation: loading2 0.6s infinite;
+    }
+    
+    .loading div:nth-child(4) {
+      left: 56px;
+      animation: loading3 0.6s infinite;
+    }
+    
+    @keyframes loading1 {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes loading2 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(24px, 0); }
+    }
+    
+    @keyframes loading3 {
+      0% { transform: scale(1); }
+      100% { transform: scale(0); }
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 0;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .projects-grid, .skills-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .discord-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .discord-user-info {
+        margin-left: 0;
+        margin-top: 1rem;
+      }
+      
+      .top-icons {
+        gap: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="kofi-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffb6c1" />
+        <stop offset="100%" stop-color="#a6e3e9" />
+      </linearGradient>
+      <linearGradient id="github-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#c8a2c8" />
+        <stop offset="100%" stop-color="#a6e3e9" />
+      </linearGradient>
+      <linearGradient id="discord-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a6e3e9" />
+        <stop offset="100%" stop-color="#c9f7c9" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="top-icons">
+    <a href="https://ko-fi.com/kyvts" class="icon-link kofi" aria-label="Ko-fi">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682.028-1.682.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/>
+      </svg>
+    </a>
+    <a href="https://github.com/senkakitsune" class="icon-link github" aria-label="GitHub">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+      </svg>
+    </a>
+    <a href="#" class="icon-link discord" aria-label="Discord">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+      </svg>
+    </a>
+  </div>
+  <header>
+    <div class="header-gradient"></div>
+    <div class="container header-content">
+      <h1><span>~/senka</span><div class="terminal-cursor"></div></h1>
+      <p class="aka-text">syen'ka / сенька / seňka</p>
+      <p class="subtitle">network penetration tester</p>
+    </div>
+    <div class="scroll-indicator">Scroll down for projects ▼</div>
+  </header>
+  
+  
+  
+  <section class="projects" id="projects">
+    <div class="container">
+      <h2 class="section-title">projects ♥</h2>
+      <div class="projects-grid">
+        <a href="" class="project-link">
+          <div class="project-card">
+            <h3>(upcoming) neko-fang</h3>
+            <p>automated and wide range of Wi-Fi exploits ranging from simple set-up of MiTM and AiTM, to quick configuration of rogue APs and DNS servers, and additional functions to launch fake updates to victims, and take over networks entirely.</p>
+            <div class="tags">
+              <span class="tag">Network security</span>
+              <span class="tag">Red teaming</span>
+              <span class="tag">Exploits</span>
+            </div>
+          </div>
+        </a>
+        
+        <a href="https://kvts.vercel.app" target="_blank" class="project-link">
+          <div class="project-card">
+            <h3>URL-mirror</h3>
+            <p>URL-mirror is a free service that sandboxes web pages, allowing users to safely view potentially malicious or phishing links without risk. It also helps bypass censorship, providing access to unbiased news in restricted regions by routing the content through an american proxy.</p>
+            <div class="tags">
+              <span class="tag">Anonymization</span>
+              <span class="tag">Sandbox</span>
+              <span class="tag">Anti-phishing</span>
+            </div>
+          </div>
+        </a>
+        
+        <a href="https://nekolyze.vercel.app" class="project-link">
+          <div class="project-card">
+            <h3>nekolyze</h3>
+            <p>(WORK IN PROGRESS) Another free web application that offers YARA based file scanning, trained on over 15,000 rules, providing quick and precise comparisons of files, detecting goverment-used viruses, as well as other types of malware.</p>
+            <div class="tags">
+              <span class="tag">Malware analysis</span>
+              <span class="tag">File scanning</span>
+
+            </div>
+          </div>
+        </a>
+               
+      </div>
+    </div>
+  </section>
+  
+  <section class="discord-status" id="discord-status">
+    <div class="container">
+      <h2 class="section-title">discord status</h2>
+      <div class="discord-card" id="discord-card">
+        <div class="discord-header">
+          <div class="discord-avatar">
+            <img id="discord-avatar-img" src="/api/placeholder/80/80" alt="Discord Avatar">
+            <div id="status-indicator" class="discord-status-indicator discord-status-offline"></div>
+          </div>
+          <div class="discord-user-info">
+            <div class="discord-username" id="discord-username">Loading...</div>
+            <div class="discord-discriminator" id="discord-discriminator">#0000</div>
+            <div class="discord-status-text" id="discord-status-text">
+              <div class="loading">
+                <div></div><div></div><div></div><div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="skills" id="skills">
+    <div class="container">
+      <h2 class="section-title">skills/achievements</h2>
+      <div class="skills-container">
+        <div class="skill-category">
+          <h3>network penetration</h3>
+          <ul class="skill-list">
+            <li>4+ years of network penetrating</li>
+            <li>internal lateral movement</li>
+            <li>long distance MiTM/AiTM & persistence</li>
+            <li>Firewall/IDS evasion</li>
+          </ul>
+        </div>
+        
+        <div class="skill-category">
+          <h3>languages/libraries I work with.</h3>
+          <ul class="skill-list">
+            <li>Python & Bash/powershell </li>
+            <li>Scapy</li>
+            <li>Flask</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>bug-bounties, vulnerabilities found</h3>
+          <ul class="skill-list">
+            <li>Discord, Vodafone, UPC</li>
+            <li>Other firmware/network vulnerabilities</li>
+            <li>over 2400$ recieved</li>
+            <li>further vulnerabilities cannot be disclosed</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>minor safety act</h3>
+          <ul class="skill-list">
+            <li>took part in a few major anti-pedophilia project</li>
+            <li>over 120 caught as a team, and turned to law enforcement</li>
+            <li>if not enough sufficient evidence collected, compromisal of anonymity would be performed.</li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+  <footer>
+    <div class="container">
+      <p class="copyright">© 2025 • Built with security in mind</p>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', function() {
+      const scrollIndicator = document.querySelector('.scroll-indicator');
+      if (window.scrollY > 100) {
+        scrollIndicator.style.opacity = '0';
+      } else {
+        scrollIndicator.style.opacity = '0.7';
+      }
+    });
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.project-card, .skill-category, .discord-card').forEach(el => {
+      observer.observe(el);
+    });
+    
+    function typeEffect() {
+      const text = "~/senka";
+      const element = document.querySelector('h1');
+      let i = 0;
+      
+      element.innerHTML = '<span></span><div class="terminal-cursor"></div>';
+      const span = element.querySelector('span');
+      
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          if (text[i] === '~') {
+            span.textContent += text[i];
+          } else if (i < 14) { 
+            span.textContent += text[i];
+          } else {
+            element.insertBefore(document.createTextNode(text[i]), element.querySelector('.terminal-cursor'));
+          }
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+    
+
+    function fetchDiscordStatus() {
+   
+      const discordUserId = "958318834857672754";
+      const apiUrl = `https://api.lanyard.rest/v1/users/${discordUserId}`;
+      
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            updateDiscordCard(data.data);
+          } else {
+            console.error("Failed to fetch Discord status");
+            document.getElementById('discord-status-text').textContent = "Could not fetch Discord status";
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching Discord status:", error);
+          document.getElementById('discord-status-text').textContent = "Error fetching Discord status";
+        });
+    }
+    
+    function updateDiscordCard(data) {
+      if (data.discord_user && data.discord_user.avatar) {
+        const avatarUrl = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png`;
+        document.getElementById('discord-avatar-img').src = avatarUrl;
+      }
+      
+      if (data.discord_user) {
+        document.getElementById('discord-username').textContent = data.discord_user.username;
+        
+       
+        if (data.discord_user.discriminator && data.discord_user.discriminator !== '0') {
+          document.getElementById('discord-discriminator').textContent = `#${data.discord_user.discriminator}`;
+        } else {
+          document.getElementById('discord-discriminator').textContent = '';
+        }
+      }
+      
+      const statusIndicator = document.getElementById('status-indicator');
+      statusIndicator.className = 'discord-status-indicator';
+      
+      let statusText = "";
+      switch (data.discord_status) {
+        case 'online':
+          statusIndicator.classList.add('discord-status-online');
+          statusText = "Online";
+          break;
+        case 'idle':
+          statusIndicator.classList.add('discord-status-idle');
+          statusText = "Idle";
+          break;
+        case 'dnd':
+          statusIndicator.classList.add('discord-status-dnd');
+          statusText = "Do Not Disturb";
+          break;
+        default:
+          statusIndicator.classList.add('discord-status-offline');
+          statusText = "Offline";
+      }
+      
+      document.getElementById('discord-status-text').textContent = statusText;
+  
+    }
+
+    window.addEventListener('load', () => {
+      typeEffect();
+      fetchDiscordStatus();
+      
+      setInterval(fetchDiscordStatus, 10000);
+    });
+
+  </script>
+</body>
+</html>
