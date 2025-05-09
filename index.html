@@ -14,16 +14,6 @@
         html {
             scroll-behavior: smooth;
         }
-        :root {
-            --bg-dark: #000000;
-            --bg-darker: #000000;
-            --bg-white: #ffffff;
-            --accent-pink: #ff5ebc;
-            --accent-blue: #5e9fff;
-            --text-primary: #f0f0f0;
-            --text-secondary: #a9a9b3;
-            --text-dark: #333333;
-        }
         
         * {
             margin: 0;
@@ -32,18 +22,53 @@
             font-family: 'Courier New', monospace;
         }
         
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            transition: background-color 0.8s ease, color 0.8s ease;
+
+        :root {
+            --bg-dark: #121212;
+            --bg-darker: #0a0a0a;
+            --bg-white: #757579;
+            --bg-light: #e8e8ed;
+            --accent-pink: #ff5ebc;
+            --accent-blue: #5e9fff;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a9a9b3;
+            --text-dark: #333333;
+            --text-light: #555555;
         }
-        
+
         body.white-mode {
             background-color: var(--bg-white);
             color: var(--text-dark);
         }
-        
+
+
+        .white-mode .terminal {
+            border: 1px solid rgba(255, 94, 188, 0.4);
+            background-color: var(--bg-light);
+        }
+
+
+        .white-mode .connect {
+            background-color: rgba(232, 232, 237, 0.9);
+        }
+
+        .white-mode footer {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background-color 1.2s ease, color 1.8s ease;
+        }
+
+        header, .connect, footer, .skill-card, .project-card, .hero-subtitle, .terminal {
+            transition: all 1.2s ease;
+        }
+                
+       
         .noise {
             position: fixed;
             top: 0;
@@ -196,10 +221,7 @@
             border: 1px solid rgba(255, 94, 188, 0.2);
         }
         
-        .white-mode .terminal {
-            border: 1px solid rgba(255, 94, 188, 0.4);
-            background-color: #f1f1f1;
-        }
+        
         
         .terminal-header {
             display: flex;
@@ -459,9 +481,7 @@
             transition: all 0.8s ease;
         }
         
-        .white-mode .connect {
-            background-color: rgba(245, 245, 245, 0.9);
-        }
+        
         
         .connect-icons {
             display: flex;
